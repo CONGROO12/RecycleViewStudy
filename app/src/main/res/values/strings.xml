@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Recycle View Study</string>
+    <string name="title_activity_s1_vertical">S1VerticalActivity</string>
+    <string name="hint">...</string>
+    <string name="Hhint">编辑</string>
+    <string name="slh">...</string>
+</resources>
