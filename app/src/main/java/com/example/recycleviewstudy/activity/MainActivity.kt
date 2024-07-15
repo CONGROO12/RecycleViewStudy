@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recycleviewstudy.R
 import com.example.recycleviewstudy.item.Study
-import com.example.recycleviewstudy.item.initItem
 import com.example.recycleviewstudy.service.WxsService
 
 class MainActivity : ComponentActivity() {
@@ -64,7 +63,6 @@ class MainActivity : ComponentActivity() {
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val itemImage: ImageView = view.findViewById(R.id.image)
 
-            //            val itemName:TextView=view.findViewById(R.id.name)
             val itemInf: TextView = view.findViewById(R.id.inf)
         }
 
@@ -72,15 +70,11 @@ class MainActivity : ComponentActivity() {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.study, parent, false)
             val viewHolder = ViewHolder(view)
             viewHolder.itemView.setOnClickListener {
-                Log.d("wt","wew1e")
                 val position = viewHolder.bindingAdapterPosition
                 if (position == itemCount - 1) {
                     (parent.context as MainActivity).wxsBinder.play()
-                    Log.d("wt","wewe")
                 } else {
                     val item = myList[position]
-//                Toast.makeText(parent.context,"Study$position!",Toast.LENGTH_SHORT).show()
-                    Log.d("Main!!", item.activityClass.toString())
                     val intent = Intent(parent.context, item.activityClass)
                     parent.context.startActivity(intent)
                 }
