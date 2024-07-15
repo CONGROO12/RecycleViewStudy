@@ -13,21 +13,17 @@ import com.google.gson.reflect.TypeToken
 import java.util.LinkedList
 
 open class SBaseActivity : ComponentActivity() {
-    protected var myList=LinkedList<Item>()
-    protected var itemXml= R.layout.vertical_recycler_item
+    protected var myList = LinkedList<Item>()
+    protected var itemXml = R.layout.vertical_recycler_item
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val json = getSharedPreferences("data_item",Context.MODE_PRIVATE).getString("list","")
-        if(json=="")
-        {
-            initItem(myList,3)
-        }
-        else
-        {
-            val type = object : TypeToken<LinkedList<Item>>(){}.type
-            myList=Gson().fromJson(json, type)
-            Log.d("sb",myList.toString())
+        val json = getSharedPreferences("data_item", Context.MODE_PRIVATE).getString("list", "")
+        if (json == "") {
+            initItem(myList, 3)
+        } else {
+            val type = object : TypeToken<LinkedList<Item>>() {}.type
+            myList = Gson().fromJson(json, type)
         }
         setContentView(R.layout.main_layout)
     }
@@ -37,7 +33,7 @@ open class SBaseActivity : ComponentActivity() {
         val editor = getSharedPreferences("data_item", Context.MODE_PRIVATE).edit()
         val json = Gson().toJson(myList)
         editor.clear()
-        editor.putString("list",json)
+        editor.putString("list", json)
         editor.apply()
     }
 }
