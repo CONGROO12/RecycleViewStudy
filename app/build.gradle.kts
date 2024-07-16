@@ -53,6 +53,7 @@ android {
 
 dependencies {
 
+    implementation(libs.material)
     implementation(libs.androidx.core.ktx)
     implementation (libs.gson)
     implementation(libs.androidx.lifecycle.runtime.ktx)
