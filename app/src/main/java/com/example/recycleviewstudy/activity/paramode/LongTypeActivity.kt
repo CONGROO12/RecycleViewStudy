@@ -2,28 +2,27 @@ package com.example.recycleviewstudy.activity.paramode
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.provider.Settings
-import android.content.Intent
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.alibaba.dashscope.audio.asr.recognition.Recognition
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam
 import com.alibaba.dashscope.exception.NoApiKeyException
-import com.alibaba.dashscope.utils.ApiKey
 import com.example.recycleviewstudy.R
+import com.example.recycleviewstudy.activity.utils.ApiKeyUtil
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,26 +36,21 @@ class LongTypeActivity : ComponentActivity() {
     private var audioRecord: AudioRecord? = null
     private var isRecording = false
     private var isPermissionDeniedPermanently = false
+
+    companion object {
+        private const val SAMPLE_RATE = 16000
+        private const val BUFFER_SIZE = 1024
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_long)
+        setContentView(R.layout.activity_long2)
 
         resultText = findViewById(R.id.result_text)
         exitButton = findViewById(R.id.exit_button)
         startButton = findViewById(R.id.start_button)
 
-//        // 请求录音权限
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-//            != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.RECORD_AUDIO), 1
-//            )
-//        } else {
-//            startRecording()
-//        }
-        // 请求录音权限[2](@ref)[6](@ref)
+        // 请求录音权限
         checkAndRequestPermission()
 
         // 开始按钮点击监听
@@ -112,7 +106,7 @@ class LongTypeActivity : ComponentActivity() {
         }
     }
 
-    // 处理权限请求结果[2](@ref)[3](@ref)[6](@ref)
+    // 处理权限请求结果
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -142,7 +136,7 @@ class LongTypeActivity : ComponentActivity() {
         }
     }
 
-    // 显示权限必要性说明弹窗[3](@ref)[6](@ref)
+    // 显示权限必要性说明弹窗[3]
     private fun showPermissionRationale() {
         AlertDialog.Builder(this)
             .setTitle("需要麦克风权限")
@@ -156,7 +150,7 @@ class LongTypeActivity : ComponentActivity() {
             .show()
     }
 
-    // 永久拒绝时的处理[2](@ref)[6](@ref)
+    // 永久拒绝时的处理
     private fun showPermanentDenialDialog() {
         AlertDialog.Builder(this)
             .setTitle("权限被永久拒绝")
@@ -171,7 +165,7 @@ class LongTypeActivity : ComponentActivity() {
             .show()
     }
 
-    // 打开系统设置[2](@ref)
+    // 打开系统设置
     private fun openAppSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.fromParts("package", packageName, null)
@@ -208,14 +202,6 @@ class LongTypeActivity : ComponentActivity() {
         )
 
 
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.RECORD_AUDIO
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            Log.d("md", "noPermission")
-//            return
-//        }
         Log.d("md", "startRecording")
         audioRecord = AudioRecord(
             MediaRecorder.AudioSource.MIC,
@@ -278,7 +264,7 @@ class LongTypeActivity : ComponentActivity() {
             .model("paraformer-realtime-v1")
             .format("pcm")
             .sampleRate(SAMPLE_RATE)
-            .apiKey(dashScopeApiKey)
+            .apiKey(ApiKeyUtil.dashScopeApiKey)
 //            .parameter("language_hints", arrayOf<String>("ja"))
             .build()
     }
@@ -292,27 +278,4 @@ class LongTypeActivity : ComponentActivity() {
         }
     }
 
-    companion object {
-        private const val SAMPLE_RATE = 16000
-        private const val BUFFER_SIZE = 1024
-
-        @get:Throws(NoApiKeyException::class)
-        private val dashScopeApiKey: String
-            // 保持原 getDashScopeApiKey 方法逻辑
-            get() {
-                var dashScopeApiKey: String? = null
-                try {
-                    val apiKey: ApiKey = ApiKey()
-                    dashScopeApiKey = ApiKey.getApiKey(null)// Retrieve from environment variable.
-                } catch (e: NoApiKeyException) {
-                    println("No API key found in environment.")
-                }
-                if (dashScopeApiKey == null) {
-                    // If you cannot set api_key in your environment variable,
-                    // you can set it here by code
-                    dashScopeApiKey = "sk-21e066446f00453187ff30d22406f853"
-                }
-                return dashScopeApiKey
-            }
-    }
 }

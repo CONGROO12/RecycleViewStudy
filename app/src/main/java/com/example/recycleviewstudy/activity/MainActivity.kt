@@ -17,6 +17,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recycleviewstudy.R
+import com.example.recycleviewstudy.activity.paramode.FileTypeActivity
 import com.example.recycleviewstudy.activity.paramode.LongTypeActivity
 import com.example.recycleviewstudy.item.Study
 import com.example.recycleviewstudy.service.WxsService
@@ -52,9 +53,9 @@ class MainActivity : ComponentActivity() {
 
     private fun initItem() {
         myList.add(Study("长时实时识别", R.drawable.m10, LongTypeActivity::class.java))
-//        myList.add(Study("垂直滑动", R.drawable.m1, S1VerticalActivity::class.java))
+        myList.add(Study("文件识别", R.drawable.m1, FileTypeActivity::class.java))
 //        myList.add(Study("水平滑动", R.drawable.m2, S2HorizontalActivity::class.java))
-//        myList.add(Study("网格滑动", R.drawable.m3, S3GridActivity::class.java))
+        myList.add(Study("网格滑动", R.drawable.m3, S3GridActivity::class.java))
 //        myList.add(Study("瀑布流滑动", R.drawable.m4, S4StaggeredActivity::class.java))
 //        myList.add(Study("梯形流动", R.drawable.m5, S5StackActivity::class.java))
     }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -49,6 +50,11 @@
             android:name=".activity.paramode.LongTypeActivity"
             android:exported="false"
             android:label="LongTypeActivity"
+            android:theme="@style/Theme.RecycleViewStudy" />
+        <activity
+            android:name=".activity.paramode.FileTypeActivity"
+            android:exported="false"
+            android:label="FileTypeActivity"
             android:theme="@style/Theme.RecycleViewStudy" />
         <activity
             android:name=".activity.MainActivity"
