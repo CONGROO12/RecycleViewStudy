@@ -136,7 +136,7 @@ class LongTypeActivity : ComponentActivity() {
         }
     }
 
-    // 显示权限必要性说明弹窗[3]
+    // 显示权限必要性说明弹窗
     private fun showPermissionRationale() {
         AlertDialog.Builder(this)
             .setTitle("需要麦克风权限")
