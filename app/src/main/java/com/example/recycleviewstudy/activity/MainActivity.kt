@@ -52,10 +52,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initItem() {
-        myList.add(Study("长时实时识别", R.drawable.m10, LongTypeActivity::class.java))
-        myList.add(Study("文件识别", R.drawable.m1, FileTypeActivity::class.java))
+        myList.add(Study("长时实时识别", R.drawable.iconblue, LongTypeActivity::class.java))
+        myList.add(Study("文件识别", R.drawable.icongreen, FileTypeActivity::class.java))
 //        myList.add(Study("水平滑动", R.drawable.m2, S2HorizontalActivity::class.java))
-        myList.add(Study("网格滑动", R.drawable.m3, S3GridActivity::class.java))
+        myList.add(Study("自定义模型", R.drawable.iconpurple, S3GridActivity::class.java))
 //        myList.add(Study("瀑布流滑动", R.drawable.m4, S4StaggeredActivity::class.java))
 //        myList.add(Study("梯形流动", R.drawable.m5, S5StackActivity::class.java))
     }
@@ -86,8 +86,8 @@ class MainActivity : ComponentActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             if (position == itemCount - 1) {
-                holder.itemImage.setImageResource(R.drawable.wxs)
-                holder.itemInf.text = "播放妄想税！"
+                holder.itemImage.setImageResource(R.drawable.add_24px)
+                holder.itemInf.text = "添加自定义方案"
             } else {
                 val item = myList[position]
                 holder.itemImage.setImageResource(item.imageId)
