@@ -213,6 +213,7 @@ class LongTypeActivity : ComponentActivity() {
 
         isRecording = true
         runOnUiThread {
+            resultText?.text = ""
             startButton?.isEnabled = false
             exitButton?.isEnabled = true
         }

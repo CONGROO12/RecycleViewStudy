@@ -1,6 +1,7 @@
 package com.example.recycleviewstudy.activity.paramode
 
 import android.Manifest
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaExtractor
@@ -96,6 +97,8 @@ class FileTypeActivity : ComponentActivity() {
         if (requestCode == FILE_SELECT_CODE && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 val filePath = getFilePathFromUri(uri)
+                Log.d("md", "${uri.scheme}")
+//                val filePath = uri.path
                 filePath?.let {
                     selectedFile = File(it)
                     updateButtonStates()
@@ -105,21 +108,89 @@ class FileTypeActivity : ComponentActivity() {
         }
     }
 
-    private fun getFilePathFromUri(uri: Uri): String? {
-        var path: String? = null
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                path = it.getString(columnIndex)
+//    private fun getFilePathFromUri(uri: Uri): String? {
+//        var path: String? = null
+//        val projection = arrayOf(MediaStore.Images.Media.DATA)
+//        val cursor = contentResolver.query(uri, projection, null, null, null)
+//        cursor?.use {
+//            if (it.moveToFirst()) {
+//                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//                path = it.getString(columnIndex)
+//            }
+//        }
+//        return path ?: uri.path
+//    }
+private fun getFilePathFromUri(uri: Uri): String? {
+    return when (uri.scheme) {
+        ContentResolver.SCHEME_FILE -> uri.path
+        ContentResolver.SCHEME_CONTENT -> {
+            // 首先尝试获取真实文件路径（适用于部分设备）
+            val path = getPathFromContentUri(uri)
+            if (path != null) {
+                path
+            } else {
+                // 如果获取真实路径失败，则创建临时文件
+                uriToTempFile(uri)
             }
         }
-        return path ?: uri.path
+        else -> uri.path
     }
+}
+
+    private fun getPathFromContentUri(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME)
+        contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+                return cursor.getString(columnIndex)
+            }
+        }
+        return null
+    }
+
+    private fun uriToTempFile(uri: Uri): String? {
+        val fileName = getFileName(uri) ?: return null
+        val tempFile = File.createTempFile("temp_", ".${fileName.substringAfterLast('.', "")}", cacheDir)
+        tempFile.deleteOnExit()
+
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            tempFile.outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
+
+        return tempFile.absolutePath
+    }
+
+    private fun getFileName(uri: Uri): String? {
+        var fileName: String? = null
+        val projection = arrayOf(MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Video.Media.DISPLAY_NAME)
+
+        contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val columnIndex = cursor.getColumnIndexOrThrow(
+                    if (uri.toString().contains("audio")) {
+                        MediaStore.Audio.Media.DISPLAY_NAME
+                    } else {
+                        MediaStore.Video.Media.DISPLAY_NAME
+                    }
+                )
+                fileName = cursor.getString(columnIndex)
+            }
+        }
+
+        // 如果从MediaStore获取不到文件名，则尝试从URI路径中获取
+        if (fileName == null) {
+            fileName = uri.lastPathSegment
+        }
+
+        return fileName
+    }
+
 
     private fun isFileSupported(file: File): Boolean {
         val extension = file.extension.lowercase()
+        Log.d("md","extens:${extension}")
         return SUPPORTED_AUDIO_FORMATS.contains(extension) ||
                 SUPPORTED_VIDEO_FORMATS.contains(extension)
     }
