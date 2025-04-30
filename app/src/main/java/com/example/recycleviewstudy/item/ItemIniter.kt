@@ -1,6 +1,7 @@
 package com.example.recycleviewstudy.item
 
 import com.example.recycleviewstudy.R
+import com.example.recycleviewstudy.activity.paramode.LongTypeActivity
 import java.util.LinkedList
 
 val  imageList:ArrayList<Int> = arrayListOf(
@@ -25,6 +26,9 @@ fun initItem(myList: LinkedList<Item>, time:Int) {
 fun addItem(start:Int, myList: LinkedList<Item>)
 {
     myList.add(start, Item("item","newInf", getRLI()))
+}
+fun addStudy(start:Int, myList: ArrayList<Study>) {
+    myList.add(start,Study("长时实时识别", R.drawable.iconblue, LongTypeActivity::class.java.name))
 }
 private fun getRLS(string: String):String
 {

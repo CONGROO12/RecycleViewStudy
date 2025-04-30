@@ -215,6 +215,7 @@ private fun getFilePathFromUri(uri: Uri): String? {
                     val param = buildRecognitionParam()
 
                     // 调用同步识别接口
+                    Log.d("md","call")
                     val result = recognizer.call(param, file)
 
                     runOnUiThread {
@@ -222,10 +223,10 @@ private fun getFilePathFromUri(uri: Uri): String? {
                         val jsonObject: JsonObject = gson.fromJson(result, JsonObject::class.java)
                         //herr
                         var mResultText = ""
+                        Log.d("md","result:$result")
                         if (jsonObject.has("sentences")) {
                             for (sent in jsonObject.get("sentences").asJsonArray) {
                                 mResultText = sent.asJsonObject.get("text").asString
-                                Log.d("md","txt:$resultText")
                             }
                         }
                         resultText?.text = "识别结果:\n$mResultText"
@@ -246,7 +247,7 @@ private fun getFilePathFromUri(uri: Uri): String? {
     @Throws(NoApiKeyException::class)
     private fun buildRecognitionParam(): RecognitionParam {
         return RecognitionParam.builder()
-            .model("paraformer-realtime-v1")
+            .model("paraformer-realtime-v2")
             .format("wav") // 根据实际API支持调整
 //            .format("mp3")
             .sampleRate(16000)
