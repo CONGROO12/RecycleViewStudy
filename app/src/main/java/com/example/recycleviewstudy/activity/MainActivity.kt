@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -68,15 +69,16 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
         Log.d("md", "destroy")
         val editor = getSharedPreferences("study_item", Context.MODE_PRIVATE).edit()
-        Log.d("md","jsonsta")
+        Log.d("md", "jsonsta")
         try {
-        val json = Gson().toJson(myList)
-        Log.d("md","json:$json")
-        editor.clear()
-        editor.putString("list", json)
-        val rs = editor.commit()
-        Log.d("md", "rs:$rs")}catch (e:Exception){
-            Log.d("md","errmsg:${e.message}")
+            val json = Gson().toJson(myList)
+            Log.d("md", "json:$json")
+            editor.clear()
+            editor.putString("list", json)
+            val rs = editor.commit()
+            Log.d("md", "rs:$rs")
+        } catch (e: Exception) {
+            Log.d("md", "errmsg:${e.message}")
         }
     }
 
@@ -132,15 +134,16 @@ class MainActivity : ComponentActivity() {
 
         private fun insItem(position: Int, parent: ViewGroup) {
             val builder = MaterialAlertDialogBuilder(parent.context)
-            builder.setTitle("增加信息")
-//            val view = LayoutInflater.from(parent.context).inflate(R.layout.num_edit_item, null)
-//            val infEdit = view.findViewById<EditText>(R.id.numEdit)
-//            var num = 1
-//            infEdit.setText(num.toString())
-//            builder.setView(view)
+            builder.setTitle("增加自定义模型")
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.edit_item, null)
+            val infEdit = view.findViewById<EditText>(R.id.infEdit)
+            var name = "自定义模型"
+            infEdit.setText(name)
+            builder.setView(view)
             builder.setPositiveButton("确定")
             { _, _ ->
-                addStudy(position, myList)
+                name = infEdit.text.toString()
+                addStudy(position, myList, name)
                 this.notifyItemInserted(position)
 //                }
                 this.notifyItemRangeChanged(position, myList.size)

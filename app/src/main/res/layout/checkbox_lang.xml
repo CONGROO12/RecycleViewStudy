@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="15dp">
+    <CheckedTextView
+        android:id="@+id/zh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:text="中文"/>
+    <CheckedTextView
+        android:id="@+id/en"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="英语"/>
+    <CheckedTextView
+        android:id="@+id/ja"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="日语"/>
+    <CheckedTextView
+        android:id="@+id/yue"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="粤语"/>
+    <CheckedTextView
+        android:id="@+id/ko"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="韩语"/>
+</LinearLayout>

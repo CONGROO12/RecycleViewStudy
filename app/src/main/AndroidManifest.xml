@@ -57,6 +57,12 @@
             android:label="FileTypeActivity"
             android:theme="@style/Theme.RecycleViewStudy" />
         <activity
+            android:name=".activity.paramode.CustTypeActivity"
+            android:exported="false"
+            android:label="CustTypeActivity"
+            android:theme="@style/Theme.RecycleViewStudy" />
+
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
